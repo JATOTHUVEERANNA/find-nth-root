@@ -1,0 +1,52 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+    // Function to calculate mid^n and check if it matches m or overflows
+    public static int func(long mid, int n, int m) {
+        long ans = 1;
+        for (int i = 1; i <= n; i++) {
+            // Prevent overflow by checking if ans would exceed m
+            if (ans > m / mid) {
+                return 2; // Overflow
+            }
+            ans *= mid;
+            if (ans == m) {
+                return 1; // Exact match
+            }
+        }
+        return (ans < m) ? 0 : 2; // ans < m or ans > m
+    }
+
+    // Function to find the nth root of m using binary search
+    public static int NthRoot(int n, int m) {
+        if (m < 1 || n < 1) return -1; // Invalid input check
+        
+        long low = 1;
+        long high = m;
+        
+        while (low <= high) {
+            long mid = low + (high - low) / 2;
+            int midN = func(mid, n, m);
+            if (midN == 1) {
+                return (int)mid; // Found the exact root
+            } else if (midN == 0) {
+                low = mid + 1; // Search in the upper half
+            } else {
+                high = mid - 1; // Search in the lower half
+            }
+        }
+        
+        return -1; // No integer nth root found
+    }
+
+    public static void main(String[] args) throws java.lang.Exception {
+        // Example usage
+        int n = 3; // nth root
+        int m = 9; // Number to find the root of
+        int result = NthRoot(n, m);
+        System.out.println(result); // Output the result
+    }
+}
